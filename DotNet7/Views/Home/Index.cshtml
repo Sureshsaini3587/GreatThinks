@@ -1,0 +1,83 @@
+﻿@model DotNet7.Models.ViewModel.GetAllMembersVm
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="container">
+    <table class="table table-bordered">
+        <tr>
+            <th>Membership</th>
+            <th> Name</th>
+            <th>Email Address</th>
+            <th>Mobile Number </th>
+            <th>Date </th>
+            <th>Member Type </th>
+        </tr>
+        @if (Model.MemberList != null && Model.MemberList.Count() > 0)
+        {
+            foreach (var items in Model.MemberList)
+            {
+                <tr>
+                    <td>@items.Fld_MembershipNumber</td>
+                    <td>@items.Fld_MemberName</td>
+                    <td>@items.Fld_EmailAddress</td>
+                    <td>@items.Fld_MobileNumber </td>
+                    <td>@items.Fld_CreateDate.ToString("dd,MMM,yy") </td>
+                    @{
+                        var memberType = items.Fld_MemberType == 1 ? "Employee" : "Customer";
+
+                    }
+                    <td>
+                        @memberType
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+@*<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <button id="startButton">Start</button>
+    <button>Stop</button>
+</div>*@
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            var vals = {
+                "Fld_MemberName": "Suresh Kumar",
+                "Fld_MobileNumber": "9057083587",
+            }
+
+            $("#startButton").click(function () {
+                $.ajax({
+                    type: 'Post',
+                    data: JSON.stringify(vals),
+                    url: "/api/MasterApi/AddMember",
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            alert(`Member Successfully Created: Membership${response.fld_MembershipNumber}`);
+                        }
+                        else {
+                            alert("Please Contact to Developer");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                    },
+
+                });
+            });
+
+        });
+    </script>
+
+}

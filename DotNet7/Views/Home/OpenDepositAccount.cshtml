@@ -1,0 +1,208 @@
+﻿@using System.Data;
+@{
+    ViewData["Title"] = "OpenDepositAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var ListData = TempData["Accounts"] as DataSet;
+    var AccountsListData = ListData?.Tables[0];
+}
+
+<h1>Open Deposit Account</h1>
+
+<div class="container" id="memberSearchSection">
+    <div class="row text-center">
+        <div class="col-md-12 ">
+            <input id="membershipNumber" class="col-md-6" style="height: 40px;" placeholder="Enter Membership Number" />
+            <button id="VerifyButton" class="col-md-4 btn btn-outline-success">Verify</button>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:50px;align-content:flex-start">
+
+    <div class="col-md-8 col-lg-8 col-sm-8 text-start">
+        @if (AccountsListData?.Rows.Count > 0)
+        {
+            <table class="table table-bordered">
+                <tr>
+                    <th>SrNo</th>
+                    <th>Membership Number</th>
+                    <th>Name</th>
+                    <th>Account Number</th>
+                    <th>Scheme</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                </tr>
+                @{
+                    var srNO = 1;
+                }
+                @for (int i = 0; i < AccountsListData?.Rows.Count; i++)
+                {
+                    <tr>
+                        <td>@srNO</td>
+                        <td>@AccountsListData.Rows[i]["Fld_MembershipNumber"]</td>
+                        <td>@AccountsListData.Rows[i]["Fld_MemberName"]</td>
+                        <td>@AccountsListData.Rows[i]["Fld_AccountNumber"]</td>
+                        <td>@AccountsListData.Rows[i]["Fld_SchemeName"]</td>
+                        <td>@AccountsListData.Rows[i]["Fld_SchemeType"]</td>
+                        <td>@AccountsListData.Rows[i]["Fld_Status"]</td>
+                    </tr>
+                    srNO++;
+                }
+
+
+            </table>
+        }
+        else
+        {
+            <h3 class="text-center">No Records Availble!</h3>
+        }
+    </div>
+
+    <div class="col-md-4 col-lg-4 col-sm-4" style="display:none" id="memberDetailsSection">
+        <div class=" card-body">
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Member Name</label>
+                <input readonly="readonly" id="memberName" class="col-md-8" type="text" />
+            </div>
+
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Membership Number</label>
+                <input readonly="readonly" id="membershipNo" class="col-md-8" type="text" />
+            </div>
+
+
+
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Mobile Number</label>
+                <input readonly="readonly" maxlength="10" id="mobileNumber" class="col-md-8" type="text" />
+            </div>
+
+
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Email Address</label>
+                <input readonly="readonly" id="emailAddress" class="col-md-8" type="text" />
+            </div>
+
+
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Account Scheme</label>
+                <select id="accountScheme">
+                    <option value="RD001">Regular RD</option>
+                    <option value="FD002">Regular FD</option>
+                </select>
+            </div>
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Start Date</label>
+                <input id="startDate" class="col-md-8" type="date" />
+            </div>
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Maturity Date</label>
+                <input id="maturityDate" class="col-md-8" type="date" />
+            </div>
+
+            <div class="col-md-12" style="margin:20px">
+                <label class="col-md-4" style="float:left">Deposit Amount</label>
+                <input id="depositAmount" class="col-md-8" type="number" />
+            </div>
+
+
+        </div>
+        <div class="card-footer ">
+            <button style="margin-top:50px" id="SubmitButton" class="btn btn-success" name="Submit">Open Account</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#VerifyButton").click(function () {
+                var val = $("#membershipNumber").val();
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/MasterApi/VerifyMember?membershipNumber=${$("#membershipNumber").val()}`,
+                    success: function (response) {
+                        console.log(response.data);
+                        if (response.fld_Status == 1) {
+                            $("#memberName").val(response.data[0].fld_MemberName);
+                            $("#membershipNo").val(response.data[0].fld_MembershipNumber);
+                            //$("#membershipNo").val($("#membershipNumber").val());
+                            $("#mobileNumber").val(response.data[0].fld_MobileNumber);
+                            $("#emailAddress").val(response.data[0].fld_EmailAddress);
+                            //$("#creationDate").val(response.data[0].fld_CreateDate);
+
+
+                            //$('#memberSearchSection').hide();
+                            //$('#memberDetailsSection').show();
+
+                            //$("#memberSearchSection").css("display", "none");
+                            $("#memberDetailsSection").css("display", "block");
+
+                            $("#memberSearchSection").prop("disabled", true);
+
+
+                        }
+                        else {
+                            alert("No Record Found");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                    },
+
+                });
+            });
+
+            $("#SubmitButton").click(function () {
+                var vals = {
+                    "Fld_StartDate": $("#startDate").val(),
+                    "Fld_MembershipNumber": $("#membershipNo").val(),
+                    "Fld_SchemeCode": $("#accountScheme").val(),
+                    "Fld_MaturityDate": $("#maturityDate").val(),
+                    "Fld_Amount": $("#depositAmount").val(),
+                }
+
+
+                $.ajax({
+                    type: 'Post',
+                    data: JSON.stringify(vals),
+                    url: "/api/MasterApi/OpenDepositAccount",
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            alert(`Account Successfully Created AccNo: ${response.fld_AccountNumber}`);
+                            location.reload();
+                        }
+                        else {
+                            alert("Please Contact to Developer");
+                        }
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                    },
+                    catch: function (e) {
+                        console.log(e);
+                    }
+
+                });
+            });
+        });
+    </script>
+
+}
+

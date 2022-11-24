@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="card-header">Registration Form</h1>
+
+
+
+
+<div class="container text-center">
+    <div class="card-header">
+        <h5>Please Fill All Details Carefully</h5>
+    </div>
+    <div class=" card-body">
+        <div class="col-md-12">
+            <div class="col-md-6" style="float:left; margin-top:25px">
+                <div class="col-md-12" style="float:left">
+                    <label class="col-md-4" style="float:left">Member Name</label>
+                    <input id="memberName" class="col-md-8" type="text" />
+                </div>
+
+            </div>
+            <div class="col-md-6" style="float:left; margin-top:25px">
+                <div class="col-md-12" style="float:left">
+                    <label class="col-md-4" style="float:left">Father's' Name</label>
+                    <input id="fathersName" class="col-md-8" type="text" />
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-6" style="float:left; margin-top:25px">
+                <div class="col-md-12" style="float:left">
+                    <label class="col-md-4" style="float:left">Mobile Number</label>
+                    <input maxlength="10" id="mobileNumber" class="col-md-8" type="text" />
+                </div>
+
+            </div>
+            <div class="col-md-6" style="float:left; margin-top:25px">
+                <div class="col-md-12" style="float:left">
+                    <label class="col-md-4" style="float:left">Email Address</label>
+                    <input id="emailAddress" class="col-md-8" type="text" />
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-6" style="float:left; margin-top:25px">
+                <div class="col-md-12" style="float:left">
+                    <label class="col-md-4" style="float:left">Aadhar Number</label>
+                    <input maxlength="12" id="aadharNumber" class="col-md-8" type="text" />
+                </div>
+
+            </div>
+            <div class="col-md-6" style="float:left; margin-top:25px">
+                <div class="col-md-12" style="float:left">
+                    <label class="col-md-4" style="float:left">Date Of Birth</label>
+                    <input id="dateOfBirth" class="col-md-8" type="date" />
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top:25px">
+            <div class="col-md-6" margin-top:25px">
+                <div class="col-md-12" style="float:left;margin-top:25px">
+                    <label class="col-md-4" style="float:left">Member Type</label>
+                    <select name="MemberType" id="memberType">
+                        <option value="1">Employee</option>
+                        <option value="2">Customer</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="col-md-6" style="margin-top:25px">
+                @* <div class="col-md-12" style="float:left">
+                <label class="col-md-4" style="float:left">Date Of Birth</label>
+                <input class="col-md-8" type="date" />
+                </div>*@
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-footer ">
+        <button style="margin-top:50px" id="SubmitButton" class="btn btn-success" name="Submit">Submit</button>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+
+
+            $("#SubmitButton").click(function () {
+                var vals = {
+                    "Fld_MemberName": $("#memberName").val(),
+                    "Fld_FatherName": $("#fathersName").val(),
+                    "Fld_DOB": $("#dateOfBirth").val(),
+                    "Fld_MemberType": $("#memberType").val(),
+                    "Fld_MobileNumber": $("#mobileNumber").val(),
+                    "Fld_EmailAddress": $("#emailAddress").val(),
+                    "Fld_AadharNumber": $("#aadharNumber").val(),
+
+                }
+
+
+                $.ajax({
+                    type: 'Post',
+                    data: JSON.stringify(vals),
+                    url: "/api/MasterApi/AddMember",
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            alert(`Member Successfully Created: Membership${response.fld_MembershipNumber}`);
+                        }
+                        else {
+                            alert("Please Contact to Developer");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                    },
+
+                });
+            });
+
+        });
+    </script>
+}
+

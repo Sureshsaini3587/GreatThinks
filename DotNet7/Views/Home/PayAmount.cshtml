@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "PayAmount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Pay Your Dues</h3>
+
+<div style="margin-top:50px" class="container" id="SearchSection">
+    <div class="row text-center">
+        <div class="col-md-12 ">
+            <input id="accountNumber" class="col-md-6" style="height: 40px;" placeholder="Enter Account Number" />
+            <button id="getDeatilsButton" class="col-md-4 btn btn-outline-success">Get Details</button>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:50px">
+
+    <div class="col-md-6 col-sm-6 col-lg-6 text-center">
+
+        <input hidden="hidden" readonly="readonly" id="emiId" type="text" />
+
+
+        <div class="col-md-12" style="margin:20px">
+            <label class="col-md-4" style="float:left">Name</label>
+            <input readonly="readonly" id="memberName" class="col-md-8" type="text" />
+        </div>
+
+        <div class="col-md-12" style="margin:20px">
+            <label class="col-md-4" style="float:left">Amount</label>
+            <input readonly="readonly" id="depositAmount" class="col-md-8" type="text" />
+        </div>
+
+
+        <div class="col-md-12" style="margin:20px">
+            <label class="col-md-4" style="float:left">Due Date</label>
+            <input id="dueDate" readonly="readonly" class="col-md-8" type="text" />
+        </div>
+
+        <div class="footer">
+            <button style="margin-top:50px" id="depositButton" class="btn btn-success" name="Submit">Deposit Amount</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>
+        </h1>
+
+    </div>
+
+
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#getDeatilsButton").click(function () {
+                var val = $("#accountNumber").val();
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/MasterApi/GetDepositPaymentDetails?accountNumber=${$("#accountNumber").val()}`,
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            var jsondata = JSON.parse(response.data);
+                            jsondata = jsondata[0];
+                            $("#memberName").val(jsondata.Fld_MemberName);
+                            $("#emiId").val(jsondata.Fld_Id);
+                            $("#depositAmount").val(jsondata.Fld_Amount);
+                            $("#dueDate").val(jsondata.Fld_PayDate);
+                        }
+                        else {
+                            alert("No Record Found");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                        alert('Sorry,Please try again');
+                    },
+
+                });
+            });
+
+            //if (confirm("Are You Sure")) {
+
+
+            $("#depositButton").click(function () {
+
+                if (confirm("Are You Sure")) {
+                    $.ajax({
+                        type: 'Post',
+                        url: `/api/MasterApi/DepositAmount/${$('#emiId').val()}`,
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.fld_Status == 1) {
+                                alert(`Amount Successfully Deposit TxnNo: ${response.txnNo}`);
+                                location.reload();
+                            }
+                            else if (response.fld_Status == 0) {
+                                alert("No Pending Dues");
+                            }
+                            else {
+                                alert("Please Contact to Developer");
+                            }
+                        },
+                        Error: function (e) {
+                            console.log(e);
+                        },
+                        catch: function (e) {
+                            console.log(e);
+                        }
+
+                    });
+
+                }
+            });
+            //}
+        });
+    </script>
+
+}

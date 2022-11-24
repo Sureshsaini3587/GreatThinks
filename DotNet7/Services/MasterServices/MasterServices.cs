@@ -9,6 +9,7 @@ using NuGet.Protocol;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Security.Claims;
 
 namespace DotNet7.Services.MasterServices
 {
@@ -173,6 +174,27 @@ namespace DotNet7.Services.MasterServices
 
         public JsonResult DepositAmount(int emiId)
         {
+            //var claims = new List<Claim>();
+            //claims.Add(new Claim(ClaimTypes.Name, "Brock"));
+            //claims.Add(new Claim(ClaimTypes.Email, "brockallen@gmail.com"));
+            //var id = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+
+            //var ctx = Request.GetOwinContext();
+            //var authenticationManager = ctx.Authentication;
+            //authenticationManager.SignIn(id);
+
+            //var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+            //foreach (var Rol in roles)
+            //{
+            //    identity.AddClaim(new Claim(ClaimTypes.Role, Rol));
+            //}
+            //identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            //identity.AddClaim(new Claim(ClaimTypes.Email, user.Correo));
+            //identity.AddClaim(new Claim(ClaimTypes.MobilePhone, user.Celular));
+            //identity.AddClaim(new Claim("FullName", user.FullName));
+            //identity.AddClaim(new Claim("Empresa", user.Empresa));
+            //identity.AddClaim(new Claim("ConnectionStringsName", user.ConnectionStringsName));
+
             DataTable dt = new DataTable();
             try
             {

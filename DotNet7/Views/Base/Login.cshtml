@@ -1,0 +1,50 @@
+﻿
+<div class="container">
+    <div class="col-md-6 col-sm-6 col-lg-6">
+        <div>
+            <label>UserID</label>
+            <input type="text" id="userId" />
+        </div>
+
+        <div>
+            <label>Password</label>
+            <input type="text" id="password" />
+        </div>
+        <button id="loginButton"> Login</button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6">
+
+        <div class="container"></div>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#loginButton").click(function () {
+                var userid = $("#userId").val();
+                var pwd = $("#password").val();
+                $.ajax({
+                    type: "Get",
+                    url: `/login/${userid}/${pwd}`,
+                    success: function (response) {
+                        console.log('login success');
+                        window.location.replace(window.location.origin);
+
+                        //console.log(response);
+                    },
+
+                    Error: function (e) {
+                        console.log(e);
+                        alert('error');
+                    }
+
+
+                });
+
+            });
+        });
+    </script>
+}

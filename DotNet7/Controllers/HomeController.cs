@@ -1,12 +1,14 @@
 ﻿using DotNet7.Models;
 using DotNet7.Models.ViewModel;
 using DotNet7.Services.MasterServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Diagnostics;
 
 namespace DotNet7.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -25,6 +27,7 @@ namespace DotNet7.Controllers
 
         }
 
+            
         public IActionResult Index()
         {
             GetAllMembersVm getAllMembersVm = new GetAllMembersVm();
@@ -78,6 +81,8 @@ namespace DotNet7.Controllers
         {
             return View();
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

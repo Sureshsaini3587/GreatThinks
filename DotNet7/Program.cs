@@ -1,11 +1,36 @@
+using DotNet7.Data;
 using DotNet7.Services.MasterServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
 builder.Services.AddScoped<IMasterServices, MasterServices>();
+builder.Services.AddScoped<ILoginServices, LoginServices>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DbConnection")));
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+  .AddCookie("Cookies", options =>
+  {
+      options.LoginPath = "/login";
+      options.LogoutPath = "/logout";
+      options.AccessDeniedPath = "/Account/AccessDenied";
+      options.ReturnUrlParameter = "";
+  });
+
+
+
+
 
 var app = builder.Build();
 
@@ -21,7 +46,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

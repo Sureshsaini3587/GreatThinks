@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿using Azure;
+using Dapper;
+using DotNet7.Data;
 using DotNet7.Models.RequestModel;
 using DotNet7.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +53,7 @@ namespace DotNet7.Services.MasterServices
                                 @Fld_EmailAddress = model.Fld_EmailAddress,
                                 @Fld_AadharNumber = model.Fld_AadharNumber,
                                 @Fld_MemberType = model.Fld_MemberType,
+                                @Fld_Creator = model.Fld_Creator??"System",
                                 @CommandType = "Add"
                             }, commandType: CommandType.StoredProcedure);
 
@@ -119,7 +122,7 @@ namespace DotNet7.Services.MasterServices
         }
 
 
-        public DataSet GetAccounts()
+        public DataSet GetAccounts(string commandtype)
         {
             DataSet dataset = new DataSet();
             try
@@ -129,11 +132,12 @@ namespace DotNet7.Services.MasterServices
 
                     SqlCommand cmd = new SqlCommand("Sp_GetAccounts", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
-
+                    cmd.Parameters.AddWithValue("@accounttype", commandtype);
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     connection.Open();
                     adapter.Fill(dataset);
                     dataset.Tables[0].TableName = "AccountList";
+                    dataset.Tables[1].TableName = "SchemeList";
                     //var test = JsonConvert.SerializeObject(dataset);
 
                     return dataset;
@@ -172,38 +176,18 @@ namespace DotNet7.Services.MasterServices
             }
         }
 
-        public JsonResult DepositAmount(int emiId)
+        public JsonResult DepositAmount(int emiId, string creator)
         {
-            //var claims = new List<Claim>();
-            //claims.Add(new Claim(ClaimTypes.Name, "Brock"));
-            //claims.Add(new Claim(ClaimTypes.Email, "brockallen@gmail.com"));
-            //var id = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
-
-            //var ctx = Request.GetOwinContext();
-            //var authenticationManager = ctx.Authentication;
-            //authenticationManager.SignIn(id);
-
-            //var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            //foreach (var Rol in roles)
-            //{
-            //    identity.AddClaim(new Claim(ClaimTypes.Role, Rol));
-            //}
-            //identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            //identity.AddClaim(new Claim(ClaimTypes.Email, user.Correo));
-            //identity.AddClaim(new Claim(ClaimTypes.MobilePhone, user.Celular));
-            //identity.AddClaim(new Claim("FullName", user.FullName));
-            //identity.AddClaim(new Claim("Empresa", user.Empresa));
-            //identity.AddClaim(new Claim("ConnectionStringsName", user.ConnectionStringsName));
-
             DataTable dt = new DataTable();
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
+
                     SqlCommand cmd = new SqlCommand("Sp_DepositAmount", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@emiId", emiId);
-                    cmd.Parameters.AddWithValue("@Creator", "System");
+                    cmd.Parameters.AddWithValue("@Creator", creator);
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     connection.Open();
@@ -226,6 +210,42 @@ namespace DotNet7.Services.MasterServices
                 });
 
             }
+        }
+
+        public JsonResult LoanApplication(LoanApplicationRequest model)
+        {
+            try
+            {
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
+                    var response = dbConnection.Query<LoanApplicationRequest>("Sp_LoanApplication", new
+                    {
+                        @Fld_MembershipNumber = model.Fld_MembershipNumber,
+                        @Fld_RequiredLoanAmount = model.Fld_RequiredLoanAmount,
+                        @Fld_LoanScheme = model.Fld_LoanScheme,
+                        @Fld_PromiseToPayDate = model.Fld_PromiseToPayDate,
+                        @Fld_LoanSanctionDate = model.Fld_LoanSanctionDate,
+                        @Fld_PanNumber = model.Fld_PanNumber,
+                        @Fld_Creator = model.Fld_Creator,
+                    }, commandType: CommandType.StoredProcedure);
+                    if (response?.FirstOrDefault()?.Status == 1)
+                    {
+                        return new JsonResult(new { Fld_AccountNumber = response?.FirstOrDefault()?.Fld_AccountNumber, Fld_Status = response?.FirstOrDefault()?.Status });
+                    }
+                    else
+                    {
+                        return new JsonResult(new { Fld_AccountNumber = response?.FirstOrDefault()?.Fld_AccountNumber, Fld_Status = response?.FirstOrDefault()?.Status });
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Fld_AccountNumber = "", Fld_Status = 0 });
+            }
+
         }
     }
 }

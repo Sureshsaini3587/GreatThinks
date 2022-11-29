@@ -120,6 +120,7 @@
                         console.log(response);
                         if (response.fld_Status == 1) {
                             alert(`Member Successfully Created: Membership${response.fld_MembershipNumber}`);
+                            window.location.reload();
                         }
                         else {
                             alert("Please Contact to Developer");

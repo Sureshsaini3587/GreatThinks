@@ -27,6 +27,7 @@ namespace DotNet7.Controllers
         {
             try
             {
+                req.Fld_Creator = User?.Claims?.FirstOrDefault(c => c.Type == "Fld_UserId")?.Value;
                 dynamic? response = _masterServices.CreateMember(req).Value;
                 if (response?.Fld_Status == 1)
                 {
@@ -83,8 +84,7 @@ namespace DotNet7.Controllers
         {
             try
             {
-                // req = JsonConvert.DeserializeObject<dynamic>(req.ToString());
-                //    req = JsonConvert.SerializeObject(req.ToString());
+                req.Fld_Creator = User?.Claims?.FirstOrDefault(c => c.Type == "Fld_UserId")?.Value;
                 dynamic? response = _masterServices.OpenDepositAccount(req).Value;
                 if (response?.Fld_Status == 1)
                 {
@@ -134,8 +134,38 @@ namespace DotNet7.Controllers
         [Route("DepositAmount/{emiId}")]
         public ActionResult DepositAmount(int emiId)
         {
-            var response = _masterServices.DepositAmount(emiId).Value;
+            var creator = User?.Claims?.FirstOrDefault(c => c.Type == "Fld_UserId")?.Value;
+            var response = _masterServices.DepositAmount(emiId, creator).Value;
             return Ok(response);
         }
+
+
+        [HttpPost]
+        [Route("LoanApplication")]
+        public ActionResult LoanApplication(LoanApplicationRequest req)
+        {
+            try
+            {
+                req.Fld_Creator = User?.Claims?.FirstOrDefault(c => c.Type == "Fld_UserId")?.Value;
+                dynamic? response = _masterServices.LoanApplication(req).Value;
+                if (response?.Fld_Status == 1)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return BadRequest("Error,Contact to Developer");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+
+
     }
 }

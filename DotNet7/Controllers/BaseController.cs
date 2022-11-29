@@ -47,30 +47,31 @@ namespace DotNet7.Controllers
         [Route("/login/{UserId}/{pwd}")]
         public async Task<int> DoLoginAsync(string UserId, string pwd)
         {
-            //int loginStatus = _loginServices.Login(UserId, pwd);
-            var loginStatus = _loginServices.Login(UserId, pwd);
-            //Session["UserID"] = "";
-            //Session["UserName"] = "";
+            var response = _loginServices.Login(UserId, pwd);
 
-            var claims = new List<Claim>
+            if (response.FirstOrDefault()?.LoginStatus == 1)
             {
-                new Claim(ClaimTypes.NameIdentifier,""),
-                new Claim(ClaimTypes.Name,loginStatus.FirstOrDefault().Fld_MemberName),
-                new Claim("Fld_UserId",loginStatus.FirstOrDefault().Fld_UserId),
-                new Claim("Fld_MembershipNumber",loginStatus.FirstOrDefault().Fld_MembershipNumber),
-                new Claim("LoginStatus",loginStatus.FirstOrDefault().LoginStatus.ToString()),
-                new Claim("Fld_MemberName",loginStatus.FirstOrDefault().Fld_MemberName),
-                new Claim("Fld_EmailAddress",loginStatus.FirstOrDefault().Fld_EmailAddress),
+                var claims = new List<Claim>
+                 {
+                     new Claim(ClaimTypes.NameIdentifier,response.FirstOrDefault()?.Fld_UserId??""),
+                     new Claim(ClaimTypes.Name,response.FirstOrDefault()?.Fld_MemberName??""),
+                     new Claim("Fld_UserId",response.FirstOrDefault()?.Fld_UserId??""),
+                     new Claim("Fld_MembershipNumber",response.FirstOrDefault()?.Fld_MembershipNumber??""),
+                     new Claim("LoginStatus",response.FirstOrDefault()?.LoginStatus.ToString()??""),
+                     new Claim("Fld_MemberName",response.FirstOrDefault()?.Fld_MemberName??""),
+                     new Claim("Fld_EmailAddress",response.FirstOrDefault()?.Fld_EmailAddress??""),
 
-            };
+                 };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
 
-            //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTime.UtcNow.AddMinutes(20)});
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties());
+                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTime.UtcNow.AddMinutes(20)});
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties());
 
-            return loginStatus.FirstOrDefault().LoginStatus;
+            }
+
+            return response.FirstOrDefault().LoginStatus;
 
         }
 

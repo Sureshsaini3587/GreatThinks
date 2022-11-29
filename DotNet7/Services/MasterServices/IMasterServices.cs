@@ -11,10 +11,11 @@ namespace DotNet7.Services.MasterServices
         public List<GetAllMembers> GetAllMember(string MembershipNumber, string CommandText);
 
         public JsonResult OpenDepositAccount(OpenDepositAccountRequest model);
-        public DataSet GetAccounts();
+        public DataSet GetAccounts(string commandtype);
 
         public DataTable GetDepositPaymentDetails(string AccountNumber);
 
-        public JsonResult DepositAmount(int emiId);
+        public JsonResult DepositAmount(int emiId, string creator);
+        public JsonResult LoanApplication(LoanApplicationRequest model);
     }
 }

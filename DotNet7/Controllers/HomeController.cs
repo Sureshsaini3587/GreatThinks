@@ -27,7 +27,7 @@ namespace DotNet7.Controllers
 
         }
 
-            
+
         public IActionResult Index()
         {
             GetAllMembersVm getAllMembersVm = new GetAllMembersVm();
@@ -62,8 +62,8 @@ namespace DotNet7.Controllers
         public IActionResult OpenDepositAccount()
         {
             DataSet ds = new DataSet();
-            ds = _masterServices.GetAccounts();
-            TempData["Accounts"] = ds;
+            ds = _masterServices.GetAccounts("DEPOSIT");
+            TempData["data"] = ds;
             return View();
         }
 
@@ -75,6 +75,19 @@ namespace DotNet7.Controllers
             //TempData["Accounts"] = ds;
             return View();
         }
+
+
+        public IActionResult LoanApplication()
+        {
+            DataSet ds = new DataSet();
+            ds = _masterServices.GetAccounts("LOAN");
+            TempData["data"] = ds;
+            return View();
+        }
+
+
+
+
 
 
         public IActionResult Privacy()

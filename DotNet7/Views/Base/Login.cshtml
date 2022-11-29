@@ -30,8 +30,14 @@
                     type: "Get",
                     url: `/login/${userid}/${pwd}`,
                     success: function (response) {
-                        console.log('login success');
-                        window.location.replace(window.location.origin);
+                        console.log(response);
+                        if (response == 1) {
+                            console.log('login success');
+                            window.location.replace(window.location.origin);
+                        } else {
+                            alert('Sorry,UserId or Password Incorrect')
+                        }
+
 
                         //console.log(response);
                     },

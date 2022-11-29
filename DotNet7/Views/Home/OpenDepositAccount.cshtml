@@ -5,8 +5,9 @@
 }
 
 @{
-    var ListData = TempData["Accounts"] as DataSet;
+    var ListData = TempData["data"] as DataSet;
     var AccountsListData = ListData?.Tables[0];
+    var schemeList = ListData?.Tables[1];
 }
 
 <h1>Open Deposit Account</h1>
@@ -31,6 +32,7 @@
                     <th>Membership Number</th>
                     <th>Name</th>
                     <th>Account Number</th>
+                    <th>Amount</th>
                     <th>Scheme</th>
                     <th>Type</th>
                     <th>Status</th>
@@ -45,6 +47,7 @@
                         <td>@AccountsListData.Rows[i]["Fld_MembershipNumber"]</td>
                         <td>@AccountsListData.Rows[i]["Fld_MemberName"]</td>
                         <td>@AccountsListData.Rows[i]["Fld_AccountNumber"]</td>
+                        <td>@AccountsListData.Rows[i]["Fld_Amount"]</td>
                         <td>@AccountsListData.Rows[i]["Fld_SchemeName"]</td>
                         <td>@AccountsListData.Rows[i]["Fld_SchemeType"]</td>
                         <td>@AccountsListData.Rows[i]["Fld_Status"]</td>
@@ -95,8 +98,13 @@
             <div class="col-md-12" style="margin:20px">
                 <label class="col-md-4" style="float:left">Account Scheme</label>
                 <select id="accountScheme">
-                    <option value="RD001">Regular RD</option>
-                    <option value="FD002">Regular FD</option>
+                    @*<option value="0">Select Scheme</option>*@
+                    @for (int i = 0; i < schemeList?.Rows.Count; i++)
+                    {
+                        <option value=@schemeList.Rows[i]["Fld_SchemeCode"]>@schemeList.Rows[i]["Fld_SchemeName"]</option>
+                    }
+
+
                 </select>
             </div>
 

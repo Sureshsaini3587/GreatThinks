@@ -12,6 +12,8 @@
         public string? Fld_EmailAddress { get; set; }
         public string? Fld_AadharNumber { get; set; }
 
+        public string? Fld_Creator { get; set; }
+
         public int Fld_Status { get; set; }
     }
 

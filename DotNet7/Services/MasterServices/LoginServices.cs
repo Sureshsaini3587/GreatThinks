@@ -36,6 +36,7 @@ namespace DotNet7.Services.MasterServices
                 var response = dbConnection.Query<UserDetails>("Sp_Login", new { @userName = username, @pwd = password }, commandType: CommandType.StoredProcedure).ToList();
                 //return response.loginstatus;
                 //var status1 = response[0].LoginStatus;
+                dbConnection.Close();
                 int status = Convert.ToInt32(response.FirstOrDefault()?.LoginStatus);
                 return response;
 

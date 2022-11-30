@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
   .AddCookie("Cookies", options =>
   {
       options.LoginPath = "/login";
-      options.LogoutPath = "/logout";
+      options.LogoutPath = "/login";
       options.AccessDeniedPath = "/Account/AccessDenied";
       options.ReturnUrlParameter = "";
   });

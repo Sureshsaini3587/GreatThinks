@@ -47,19 +47,19 @@ namespace DotNet7.Controllers
         [Route("/login/{UserId}/{pwd}")]
         public async Task<int> DoLoginAsync(string UserId, string pwd)
         {
-            var response = _loginServices.Login(UserId, pwd);
+            var response = _loginServices.Login(UserId, pwd).FirstOrDefault();
 
-            if (response.FirstOrDefault()?.LoginStatus == 1)
+            if (response?.LoginStatus == 1)
             {
                 var claims = new List<Claim>
                  {
-                     new Claim(ClaimTypes.NameIdentifier,response.FirstOrDefault()?.Fld_UserId??""),
-                     new Claim(ClaimTypes.Name,response.FirstOrDefault()?.Fld_MemberName??""),
-                     new Claim("Fld_UserId",response.FirstOrDefault()?.Fld_UserId??""),
-                     new Claim("Fld_MembershipNumber",response.FirstOrDefault()?.Fld_MembershipNumber??""),
-                     new Claim("LoginStatus",response.FirstOrDefault()?.LoginStatus.ToString()??""),
-                     new Claim("Fld_MemberName",response.FirstOrDefault()?.Fld_MemberName??""),
-                     new Claim("Fld_EmailAddress",response.FirstOrDefault()?.Fld_EmailAddress??""),
+                     new Claim(ClaimTypes.NameIdentifier,response?.Fld_UserId??""),
+                     new Claim(ClaimTypes.Name,response?.Fld_MemberName??""),
+                     new Claim("Fld_UserId",response?.Fld_UserId??""),
+                     new Claim("Fld_MembershipNumber",response?.Fld_MembershipNumber??""),
+                     new Claim("LoginStatus",response?.LoginStatus.ToString()??""),
+                     new Claim("Fld_MemberName",response?.Fld_MemberName??""),
+                     new Claim("Fld_EmailAddress",response?.Fld_EmailAddress??""),
 
                  };
 
@@ -71,7 +71,7 @@ namespace DotNet7.Controllers
 
             }
 
-            return response.FirstOrDefault().LoginStatus;
+            return response.LoginStatus;
 
         }
 

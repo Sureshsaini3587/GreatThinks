@@ -1,101 +1,77 @@
 ﻿@{
     ViewData["Title"] = "Registration";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<h1 class="card-header">Registration Form</h1>
 
-
-
-
-<div class="container text-center">
-    <div class="card-header">
-        <h5>Please Fill All Details Carefully</h5>
+<div class="row">
+    <!-- page header -->
+    <div class="col-lg-12">
+        <h1 class="page-header">Registration Form</h1>
     </div>
-    <div class=" card-body">
-        <div class="col-md-12">
-            <div class="col-md-6" style="float:left; margin-top:25px">
-                <div class="col-md-12" style="float:left">
-                    <label class="col-md-4" style="float:left">Member Name</label>
-                    <input id="memberName" class="col-md-8" type="text" />
-                </div>
-
+    <!--end page header -->
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- Form Elements -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Please Fill All Details Carefully
             </div>
-            <div class="col-md-6" style="float:left; margin-top:25px">
-                <div class="col-md-12" style="float:left">
-                    <label class="col-md-4" style="float:left">Father's' Name</label>
-                    <input id="fathersName" class="col-md-8" type="text" />
-                </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-6 ">
+                        <label>Member Name</label>
+                        <input id="memberName" class="form-control">
+                        @*<p class="help-block">Example block-level help text here.</p>*@
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Father's Name'</label>
+                        <input id="fathersName" class="form-control" placeholder="Enter text">
+                    </div>
+                    <div class="form-group col-lg-6 ">
+                        <label>Mobile Number</label>
+                        <input maxlength="10" id="mobileNumber" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Email</label>
+                        <input id="emailAddress" type="email" class="form-control" placeholder="Enter text">
+                    </div>
 
-            </div>
-        </div>
+                    <div class="form-group col-lg-6 ">
+                        <label>Aadhar Numar</label>
+                        <input maxlength="12" id="aadharNumber" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Date Of Birth</label>
+                        <input id="dateOfBirth" type="date" class="form-control">
+                    </div>
 
-        <div class="col-md-12">
-            <div class="col-md-6" style="float:left; margin-top:25px">
-                <div class="col-md-12" style="float:left">
-                    <label class="col-md-4" style="float:left">Mobile Number</label>
-                    <input maxlength="10" id="mobileNumber" class="col-md-8" type="text" />
-                </div>
-
-            </div>
-            <div class="col-md-6" style="float:left; margin-top:25px">
-                <div class="col-md-12" style="float:left">
-                    <label class="col-md-4" style="float:left">Email Address</label>
-                    <input id="emailAddress" class="col-md-8" type="text" />
-                </div>
-
-            </div>
-        </div>
-
-        <div class="col-md-12">
-            <div class="col-md-6" style="float:left; margin-top:25px">
-                <div class="col-md-12" style="float:left">
-                    <label class="col-md-4" style="float:left">Aadhar Number</label>
-                    <input maxlength="12" id="aadharNumber" class="col-md-8" type="text" />
-                </div>
-
-            </div>
-            <div class="col-md-6" style="float:left; margin-top:25px">
-                <div class="col-md-12" style="float:left">
-                    <label class="col-md-4" style="float:left">Date Of Birth</label>
-                    <input id="dateOfBirth" class="col-md-8" type="date" />
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-12" style="margin-top:25px">
-            <div class="col-md-6" margin-top:25px">
-                <div class="col-md-12" style="float:left;margin-top:25px">
-                    <label class="col-md-4" style="float:left">Member Type</label>
-                    <select name="MemberType" id="memberType">
-                        <option value="1">Employee</option>
-                        <option value="2">Customer</option>
+                    @*<div class="form-group">
+                    <label>Selects</label>
+                    <select class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
                     </select>
+                    </div>*@
+
                 </div>
+                <div class="panel-footer">
+                    <button type="submit" id="SubmitButton" class="btn btn-primary">Submit</button>
 
-            </div>
-            <div class="col-md-6" style="margin-top:25px">
-                @* <div class="col-md-12" style="float:left">
-                <label class="col-md-4" style="float:left">Date Of Birth</label>
-                <input class="col-md-8" type="date" />
-                </div>*@
-
+                </div>
             </div>
         </div>
-
-
-    </div>
-    <div class="card-footer ">
-        <button style="margin-top:50px" id="SubmitButton" class="btn btn-success" name="Submit">Submit</button>
+        <!-- End Form Elements -->
     </div>
 </div>
-
-
 
 @section Scripts{
     <script>
         $(document).ready(function () {
-
 
 
             $("#SubmitButton").click(function () {
@@ -110,7 +86,7 @@
 
                 }
 
-
+                console.log(vals);
                 $.ajax({
                     type: 'Post',
                     data: JSON.stringify(vals),

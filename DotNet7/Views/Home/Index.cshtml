@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = "_Layout1";
 }
 <div class="row">
@@ -441,5 +440,16 @@
         <!--End Chat Panel Example-->
     </div>
 </div>
+@section Scripts{
 
+    <script src="/assets/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="/assets/plugins/morris/morris.js"></script>
+    <script src="/assets/scripts/dashboard-demo.js"></script>
+
+    <script>
+        $('#side-menu li').removeClass('selected')
+        $('#menu-nav-dashboard').addClass('selected')
+
+    </script>
+}
 

@@ -287,95 +287,38 @@
                         </div>
                         <!--end search section-->
                     </li>
-                    <li class="selected">
+                    <li id="menu-nav-dashboard" class="selected">
                         <a href="/"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Members<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="/Home/Registration">Registration</a>
-                            </li>
-                            <li>
-                                <a href="/Home/OpenDepositAccount">Accounts</a>
-                            </li>
-
-                        </ul>
-                        <!-- second-level-items -->
+                    @* <li>
+                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Members<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                    <li id="menu-nav-registration">
+                    <a href="/Home/Registration">Registration</a>
                     </li>
-                    <li>
+                    <li id="menu-nav-allmember">
+                    <a href="/Home/AllMembers">All Members</a>
+                    </li>
+
+                    </ul>
+                    <!-- second-level-items -->
+                    </li>*@
+                    <li data-target=".sidebar-collapse" id="menu-nav-registration">
+                        <a href="/Home/Registration">New Member Registration</a>
+                    </li>
+                    <li id="menu-nav-allmember">
+                        <a href="/Home/AllMembers">All Members</a>
+                    </li>
+                    <li id="menu-nav-accounts">
+                        <a href="/Home/OpenDepositAccount">Accounts</a>
+                    </li>
+                    <li id="menu-nav-pay">
                         <a href="/Home/PayAmount"><i class="fa fa-flask fa-fw"></i>Pay</a>
                     </li>
-                    <li>
+                    <li id="menu-nav-loanapplication">
                         <a href="/Home/LoanApplication"><i class="fa fa-table fa-fw"></i>Loan Application</a>
                     </li>
-                    @*<li>
-                        <a href="forms.html"><i class="fa fa-edit fa-fw"></i>Forms</a>
-                    </li>*@
-                    @*     <li>
-                    <a href="#"><i class="fa fa-wrench fa-fw"></i>UI Elements<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                    <li>
-                    <a href="panels-wells.html">Panels and Wells</a>
-                    </li>
-                    <li>
-                    <a href="buttons.html">Buttons</a>
-                    </li>
-                    <li>
-                    <a href="notifications.html">Notifications</a>
-                    </li>
-                    <li>
-                    <a href="typography.html">Typography</a>
-                    </li>
-                    <li>
-                    <a href="grid.html">Grid</a>
-                    </li>
-                    </ul>
-                    <!-- second-level-items -->
-                    </li>
-                    <li>
-                    <a href="#"><i class="fa fa-sitemap fa-fw"></i>Multi-Level Dropdown<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                    <li>
-                    <a href="#">Second Level Item</a>
-                    </li>
-                    <li>
-                    <a href="#">Second Level Item</a>
-                    </li>
-                    <li>
-                    <a href="#">Third Level <span class="fa arrow"></span></a>
-                    <ul class="nav nav-third-level">
-                    <li>
-                    <a href="#">Third Level Item</a>
-                    </li>
-                    <li>
-                    <a href="#">Third Level Item</a>
-                    </li>
-                    <li>
-                    <a href="#">Third Level Item</a>
-                    </li>
-                    <li>
-                    <a href="#">Third Level Item</a>
-                    </li>
-                    </ul>
-                    <!-- third-level-items -->
-                    </li>
-                    </ul>
-                    <!-- second-level-items -->
-                    </li>
-                    <li>
-                    <a href="#"><i class="fa fa-files-o fa-fw"></i>Sample Pages<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                    <li>
-                    <a href="blank.html">Blank Page</a>
-                    </li>
-                    <li>
-                    <a href="login.html">Login Page</a>
-                    </li>
-                    </ul>
-                    <!-- second-level-items -->
-                    </li>
-                    *@
+
 
                 </ul>
                 <!-- end side-menu -->
@@ -392,19 +335,13 @@
     </div>
     <!-- end wrapper -->
     <!-- Core Scripts - Include with every page -->
-    <script src="/assets/plugins/jquery-1.10.2.js"></script>
-    <script src="/assets/plugins/bootstrap/bootstrap.min.js"></script>
-    <script src="/assets/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/assets/plugins/pace/pace.js"></script>
-    <script src="/assets/scripts/siminta.js"></script>
+    <script src="~/assets/plugins/jquery-1.10.2.js"></script>
+    <script src="~/assets/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="~/assets/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/assets/plugins/pace/pace.js"></script>
+    @*<script src="/assets/scripts/siminta.js"></script>*@
+    <script src="~/assets/scripts/siminta.js"></script>
     <!-- Page-Level Plugin Scripts-->
-    <script src="/assets/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="/assets/plugins/morris/morris.js"></script>
-    <script src="/assets/scripts/dashboard-demo.js"></script>
-   
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
-    @*@RenderSection("Scripts",false);*@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

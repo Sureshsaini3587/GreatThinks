@@ -1,0 +1,196 @@
+﻿@{
+    ViewData["Title"] = "Pay Loan Amount";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<div class="row">
+    <!--  page header -->
+    <div class="col-lg-12">
+        <h1 class="page-header">Pay Your Loan</h1>
+    </div>
+    <!-- end  page header -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <!-- Form Elements -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">To depost Loan amount please enter Loan number and Verify</div>
+                    <div class="col-md-6">
+                        <input style="padding:5px 10px" id="loanAccountNumber" placeholder="Enter Account Number" />
+                        <button id="getDeatilsButton" style="margin-left:20px;padding:5px 20px" class="btn btn-success">Verify</button>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <input hidden="hidden" readonly="readonly" id="emiId" type="text" />
+                    <input hidden="hidden" readonly="readonly" id="loanAccountNumber" type="text" />
+
+                    <div class="form-group col-lg-6 ">
+                        <label>Member Name</label>
+                        <input readonly="readonly" id="memberName" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Due Date</label>
+                        <input readonly="readonly" id="dueDate" class="form-control" placeholder="Enter text">
+                    </div>
+                    <div class="form-group col-lg-6 ">
+                        <label>Deposit Amount</label>
+                        <input readonly="readonly" id="depositAmount" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-6 ">
+                        <label>Payment Mode</label>
+                        <input readonly="readonly" id="paymentMode" class="form-control">
+                    </div>
+                    <div class="form-group col-lg-6 ">
+                        <label>Deposit Date</label>
+                        <input type="date" id="depositDate" class="form-control">
+                    </div>
+
+                    <div class="form-group col-lg-6 ">
+                        <label>Penalty</label>
+                        <input oninput="this.value = this.value.replace(/\D/gm, '')" id="penalty" maxlength="4" class="form-control">
+                    </div>
+
+                    <div class="form-group col-lg-6 ">
+                        <label>Narration</label>
+                        <input type="text" id="NarrationText" maxlength="20" class="form-control">
+                    </div>
+
+
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" id="depositButton" class="btn btn-primary">Deposit Amount</button>
+
+                </div>
+            </div>
+        </div>
+        <!-- End Form Elements -->
+    </div>
+</div>
+@*
+<div class="row" style="margin-top:50px">
+
+    <div class="col-md-6 col-sm-6 col-lg-6 text-center">
+
+        <input hidden="hidden" readonly="readonly" id="emiId" type="text" />
+
+
+        <div class="col-md-12" style="margin:20px">
+            <label class="col-md-4" style="float:left">Name</label>
+            <input readonly="readonly" id="memberName" class="col-md-8" type="text" />
+        </div>
+
+        <div class="col-md-12" style="margin:20px">
+            <label class="col-md-4" style="float:left">Amount</label>
+            <input readonly="readonly" id="depositAmount" class="col-md-8" type="text" />
+        </div>
+
+
+        <div class="col-md-12" style="margin:20px">
+            <label class="col-md-4" style="float:left">Due Date</label>
+            <input id="dueDate" readonly="readonly" class="col-md-8" type="text" />
+        </div>
+
+        <div class="footer">
+            <button style="margin-top:50px" id="depositButton" class="btn btn-success" name="Submit">Deposit Amount</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>
+        </h1>
+
+    </div>
+
+
+</div>
+*@
+
+
+@section Scripts{
+
+    <script>
+        $('#side-menu li').removeClass('selected')
+        $('#menu-nav-payloanamount').addClass('selected')
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#getDeatilsButton").click(function () {
+                var val = $("#accountNumber").val();
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/MasterApi/GetLoanDepositDetails?accountNumber=${$("#loanAccountNumber").val()}`,
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            var jsondata = JSON.parse(response.data);
+                            jsondata = jsondata[0];
+                            $("#memberName").val(jsondata.Fld_MemberName);
+                            $("#emiId").val(jsondata.Fld_Id);
+                            $("#loanAccountNumber").val(jsondata.Fld_LoanAccountNumber);
+                            $("#depositAmount").val(jsondata.Fld_Amount);
+                            $("#dueDate").val(jsondata.Fld_PayDate);
+                            $("#paymentMode").val(jsondata.Fld_PaymentMode);
+                        }
+                        else {
+                            alert("No Record Found");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                        alert('Sorry,Please try again');
+                    },
+
+                });
+            });
+
+            //if (confirm("Are You Sure")) {
+
+
+            $("#depositButton").click(function () {
+
+                if (confirm("Are You Sure")) {
+                    $.ajax({
+                        type: 'Post',
+                        url: `/api/MasterApi/DepositLoanAmount/${$('#emiId').val()}/${$('#loanAccountNumber').val()}/${$('#depositDate').val()}/${$('#NarrationText').val()}/${$('#penalty').val()}`,
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.fld_Status == 1) {
+                                alert(`Amount Successfully Deposit TxnNo: ${response.txnNo}`);
+                                location.reload();
+                            }
+                            else if (response.fld_Status == 0) {
+                                alert("No Pending Dues");
+                            }
+                            else {
+                                alert("Please Contact to Developer");
+                            }
+                        },
+                        Error: function (e) {
+                            console.log(e);
+                        },
+                        catch: function (e) {
+                            console.log(e);
+                        }
+
+                    });
+
+                }
+            });
+            //}
+        });
+    </script>
+
+}

@@ -53,7 +53,7 @@ namespace DotNet7.Services.MasterServices
                                 @Fld_EmailAddress = model.Fld_EmailAddress,
                                 @Fld_AadharNumber = model.Fld_AadharNumber,
                                 @Fld_MemberType = model.Fld_MemberType,
-                                @Fld_Creator = model.Fld_Creator??"System",
+                                @Fld_Creator = model.Fld_Creator ?? "System",
                                 @CommandType = "Add"
                             }, commandType: CommandType.StoredProcedure);
 
@@ -160,7 +160,7 @@ namespace DotNet7.Services.MasterServices
 
                     SqlCommand cmd = new SqlCommand("Sp_GetDueAmountDetails", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@accountNumber", AccountNumber));
+                    cmd.Parameters.Add(new SqlParameter("@loanAccountNumber", AccountNumber));
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     connection.Open();
@@ -176,7 +176,7 @@ namespace DotNet7.Services.MasterServices
             }
         }
 
-        public JsonResult DepositAmount(int emiId, string creator)
+        public JsonResult DepositAmount(int emiId, string creator, DateTime depositDate, string Narration, int penalty)
         {
             DataTable dt = new DataTable();
             try
@@ -188,6 +188,9 @@ namespace DotNet7.Services.MasterServices
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@emiId", emiId);
                     cmd.Parameters.AddWithValue("@Creator", creator);
+                    cmd.Parameters.AddWithValue("@depositDate", depositDate);
+                    cmd.Parameters.AddWithValue("@narration", Narration ?? "");
+                    cmd.Parameters.AddWithValue("@penalty", penalty);
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     connection.Open();
@@ -247,5 +250,73 @@ namespace DotNet7.Services.MasterServices
             }
 
         }
+
+        public DataTable GetLoanPaymentDetails(string AccountNumber)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+
+                    SqlCommand cmd = new SqlCommand("Sp_GetDueLoanAmountDetails", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@loanAccountNumber", AccountNumber));
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    connection.Open();
+                    adapter.Fill(dt);
+                    dt.TableName = "DueAmountDetails";
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                return (dt);
+
+            }
+        }
+
+
+        public JsonResult DepositLoanAmount(int emiId, string loanAccountNumber, string creator, DateTime depositDate, string Narration, int penalty)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+
+                    SqlCommand cmd = new SqlCommand("Sp_DepositLoanAmount", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@emiId", emiId);
+                    cmd.Parameters.AddWithValue("@loanAccountNumber", loanAccountNumber);
+                    cmd.Parameters.AddWithValue("@Creator", creator);
+                    cmd.Parameters.AddWithValue("@depositDate", depositDate);
+                    cmd.Parameters.AddWithValue("@narration", Narration ?? "");
+                    cmd.Parameters.AddWithValue("@penalty", penalty);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    connection.Open();
+                    adapter.Fill(dt);
+                    return new JsonResult(new
+                    {
+                        Fld_Status = dt.Rows[0]["Flag"],
+                        TxnNo = dt.Rows[0]["TxnNo"],
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    Fld_Status = -1,
+                    Exception = ex.Message,
+
+                });
+
+            }
+        }
+
     }
 }

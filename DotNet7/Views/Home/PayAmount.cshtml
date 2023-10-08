@@ -38,7 +38,7 @@
                 </div>
 
             </div>
-            <div class="panel-body" >
+            <div class="panel-body">
                 <div class="row">
 
                     <input hidden="hidden" readonly="readonly" id="emiId" type="text" />
@@ -55,7 +55,20 @@
                         <label>Deposit Amount</label>
                         <input readonly="readonly" id="depositAmount" class="form-control">
                     </div>
-                  
+                    <div class="form-group col-lg-6 ">
+                        <label>Deposit Date</label>
+                        <input type="date" id="depositDate" class="form-control">
+                    </div>
+
+                    <div class="form-group col-lg-6 ">
+                        <label>Penalty</label>
+                        <input oninput="this.value = this.value.replace(/\D/gm, '')" id="penalty" maxlength="4" class="form-control">
+                    </div>
+
+                    <div class="form-group col-lg-6 ">
+                        <label>Narration</label>
+                        <input type="text" id="NarrationText" maxlength="20" class="form-control">
+                    </div>
 
 
                 </div>
@@ -154,7 +167,7 @@
                 if (confirm("Are You Sure")) {
                     $.ajax({
                         type: 'Post',
-                        url: `/api/MasterApi/DepositAmount/${$('#emiId').val()}`,
+                        url: `/api/MasterApi/DepositAmount/${$('#emiId').val()}/${$('#depositDate').val()}/${$('#NarrationText').val()}/${$('#penalty').val()}`,
                         contentType: "application/json",
                         success: function (response) {
                             console.log(response);

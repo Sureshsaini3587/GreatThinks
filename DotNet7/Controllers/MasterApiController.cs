@@ -131,11 +131,11 @@ namespace DotNet7.Controllers
         }
 
         [HttpPost]
-        [Route("DepositAmount/{emiId}")]
-        public ActionResult DepositAmount(int emiId)
+        [Route("DepositAmount/{emiId}/{depositDate}/{Narration}/{penalty}")]
+        public ActionResult DepositAmount(int emiId, DateTime depositDate, string Narration, int penalty)
         {
             var creator = User?.Claims?.FirstOrDefault(c => c.Type == "Fld_UserId")?.Value;
-            var response = _masterServices.DepositAmount(emiId, creator).Value;
+            var response = _masterServices.DepositAmount(emiId, creator, depositDate, Narration, penalty).Value;
             return Ok(response);
         }
 
@@ -164,6 +164,44 @@ namespace DotNet7.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetLoanDepositDetails")]
+        public ActionResult GetLoanDepositDetails(string accountNumber)
+        {
+            try
+            {
+                dynamic response = _masterServices.GetLoanPaymentDetails(accountNumber);
+                if (response.Rows.Count > 0)
+                {
+
+                    response = JsonConvert.SerializeObject(response);
+                    return Ok(new { data = response, fld_Status = 1 });
+                }
+                else
+                {
+                    response = JsonConvert.SerializeObject(response);
+                    return Ok(new { data = response, fld_Status = 0 });
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { data = ex.Message, fld_Status = -1 });
+            }
+
+        }
+
+
+
+        [HttpPost]
+        [Route("DepositLoanAmount/{emiId}/{loanAccountNumber}/{depositDate}/{Narration}/{penalty}")]
+        public ActionResult DepositLoanAmount(int emiId, string loanAccountNumber, DateTime depositDate, string Narration, int penalty)
+        {
+            var creator = User?.Claims?.FirstOrDefault(c => c.Type == "Fld_UserId")?.Value;
+            var response = _masterServices.DepositLoanAmount(emiId, loanAccountNumber, creator, depositDate, Narration, penalty).Value;
+            return Ok(response);
+        }
 
 
 

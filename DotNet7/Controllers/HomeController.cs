@@ -54,6 +54,33 @@ namespace DotNet7.Controllers
             return View(getAllMembersVm);
         }
 
+        public IActionResult AllMembers()
+        {
+            GetAllMembersVm getAllMembersVm = new GetAllMembersVm();
+            try
+            {
+                getAllMembersVm.MemberList = _masterServices.GetAllMember("", "All");
+                //DataSet ds = new DataSet();
+                //ds = _masterServices.GetAllMember("", "All");
+                //TempData["data"] = ds;
+
+                //if (response?.Fld_Status == 1)
+                //{
+                //    return Ok(response);
+                //}
+                //else
+                //{
+                //    return BadRequest("Error,Contact to Developer");
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return View(getAllMembersVm);
+        }
         public IActionResult Registration()
         {
             return View();
@@ -86,6 +113,13 @@ namespace DotNet7.Controllers
         }
 
 
+        public IActionResult PayLoanAmount()
+        {
+            //DataSet ds = new DataSet();
+            //ds = _masterServices.GetAccounts();
+            //TempData["Accounts"] = ds;
+            return View();
+        }
 
 
 

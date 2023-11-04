@@ -204,6 +204,34 @@ namespace DotNet7.Controllers
         }
 
 
+        [HttpGet]
+        [Route("GetRDReport")]
+        public ActionResult GetRDReport(string accountNumber)
+        {
+            try
+            {
+                dynamic response = _masterServices.GetRDReport(accountNumber);
+                if (response.Rows.Count > 0)
+                {
+
+                    response = JsonConvert.SerializeObject(response);
+                    return Ok(new { data = response, fld_Status = 1 });
+                }
+                else
+                {
+                    response = JsonConvert.SerializeObject(response);
+                    return Ok(new { data = response, fld_Status = 0 });
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { data = ex.Message, fld_Status = -1 });
+            }
+
+        }
+
 
     }
 }

@@ -23,5 +23,6 @@ namespace DotNet7.Services.MasterServices
         public JsonResult DepositLoanAmount(int emiId, string loanAccountNumber, string creator, DateTime depositDate, string Narration, int penalty);
 
         public DataTable GetLoanPaymentDetails(string AccountNumber);
+        public DataTable GetRDReport(string AccountNumber);
     }
 }

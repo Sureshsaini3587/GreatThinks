@@ -122,7 +122,10 @@ namespace DotNet7.Controllers
         }
 
 
-
+        public IActionResult RDReport()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {

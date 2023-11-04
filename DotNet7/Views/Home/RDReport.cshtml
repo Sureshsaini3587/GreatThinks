@@ -1,0 +1,181 @@
+﻿@using System.Data;
+@{
+    ViewData["Title"] = "Rd Report";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+
+
+<div class="row">
+    <!--  page header -->
+    <div class="col-lg-12">
+        <h1 class="page-header">RDReport</h1>
+    </div>
+    <!-- end  page header -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <!-- Advanced Tables -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">To get full details about RD Account</div>
+                    <div class="col-md-6">
+                        <input style="padding:5px 10px" id="accountNumber" placeholder="Enter RD Account Number" />
+                        <button id="VerifyButton" style="margin-left:20px;padding:5px 20px" class="btn btn-success">Verify</button>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>SrNo</th>
+                                <th>Membership Number</th>
+                                <th>Name</th>
+                                <th>Account Number</th>
+                                <th>Amount</th>
+                                <th>Scheme</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+                        <tbody id="emitableId">
+                            @{
+                                var srNO = 1;
+                            }
+                            @*   @for (int i = 0; i < AccountsListData?.Rows.Count; i++)
+                            {
+                            <tr class="odd gradeX">
+                            <td class="center">@srNO</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_MembershipNumber"]</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_MemberName"]</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_AccountNumber"]</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_Amount"]</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_SchemeName"]</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_SchemeType"]</td>
+                            <td class="center">@AccountsListData.Rows[i]["Fld_Status"]</td>
+                            </tr>
+                            srNO++;
+                            }*@
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!--End Advanced Tables -->
+
+    </div>
+</div>
+
+
+
+
+
+@section Scripts{
+
+
+    <script>
+        $('#side-menu li').removeClass('selected')
+        $('#menu-nav-rdreport').addClass('selected')
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#VerifyButton").click(function () {
+                alert('1');
+                var val = $("#accountNumber").val();
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/MasterApi/GetRDReport?accountNumber=${val}`,
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            var jsondata = response.data;
+                            //html = "";
+                            //for (var i = 0 i<jsondata.count; i++) {
+                            //    html += "<tr class='odd gradeX'>"
+                            //    html += "<td class='center'>" + (i + 1) + "</td>"
+                            //    html += "<td class='center'>"jsondata[i]"</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_AccountNumber"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_Amount"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_DepositDate"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_EmiDate"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_Depositor"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_Narration"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_Penalty"] + "</td>"
+                            //    html += "<td class='center'>" + jsondata[i]["Fld_Status"] + "</td>"
+                            //    html += "</tr>";
+                            //}
+                            //$("#emitableId").html("");
+                            //$("#emitableId").append(html);
+                            ////jsondata = jsondata[0];
+                            ////console.log(jsondata);
+                            ////$("#memberName").val(jsondata.Fld_MemberName);
+                            ////$("#emiId").val(jsondata.Fld_Id);
+                            ////$("#loanAccountNumber").val(jsondata.Fld_LoanAccountNumber);
+                            ////$("#depositAmount").val(jsondata.Fld_Amount);
+                            ////$("#dueDate").val(jsondata.Fld_PayDate);
+                            ////$("#paymentMode").val(jsondata.Fld_PaymentMode);
+                        }
+                        else {
+                            alert("No Record Found");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                        alert('Sorry,Please try again');
+                    },
+
+                });
+            });
+
+            //if (confirm("Are You Sure")) {
+
+
+            $("#depositButton").click(function () {
+
+                if (confirm("Are You Sure")) {
+                    $.ajax({
+                        type: 'Post',
+                        url: `/api/MasterApi/DepositLoanAmount/${$('#emiId').val()}/${$('#loanAccountNumber').val()}/${$('#depositDate').val()}/${$('#NarrationText').val()}/${$('#penalty').val()}`,
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.fld_Status == 1) {
+                                alert(`Amount Successfully Deposit TxnNo: ${response.txnNo}`);
+                                location.reload();
+                            }
+                            else if (response.fld_Status == 0) {
+                                alert("No Pending Dues");
+                            }
+                            else {
+                                alert("Please Contact to Developer");
+                            }
+                        },
+                        Error: function (e) {
+                            console.log(e);
+                        },
+                        catch: function (e) {
+                            console.log(e);
+                        }
+
+                    });
+
+                }
+            });
+            //}
+        });
+    </script>
+
+
+}

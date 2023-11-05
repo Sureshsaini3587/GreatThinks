@@ -160,7 +160,7 @@ namespace DotNet7.Services.MasterServices
 
                     SqlCommand cmd = new SqlCommand("Sp_GetDueAmountDetails", connection);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@loanAccountNumber", AccountNumber));
+                    cmd.Parameters.Add(new SqlParameter("@accountNumber", AccountNumber));
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     connection.Open();

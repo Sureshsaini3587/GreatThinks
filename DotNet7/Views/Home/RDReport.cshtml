@@ -36,34 +36,18 @@
                         <thead>
                             <tr>
                                 <th>SrNo</th>
-                                <th>Membership Number</th>
-                                <th>Name</th>
                                 <th>Account Number</th>
                                 <th>Amount</th>
-                                <th>Scheme</th>
-                                <th>Type</th>
+                                <th>Emi Date</th>
                                 <th>Status</th>
+                                <th>Deposit Date</th>
+                                <th>Depositor</th>
+                                <th>Penalty</th>
+                                <th>Narration</th>
                             </tr>
 
                         </thead>
                         <tbody id="emitableId">
-                            @{
-                                var srNO = 1;
-                            }
-                            @*   @for (int i = 0; i < AccountsListData?.Rows.Count; i++)
-                            {
-                            <tr class="odd gradeX">
-                            <td class="center">@srNO</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_MembershipNumber"]</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_MemberName"]</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_AccountNumber"]</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_Amount"]</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_SchemeName"]</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_SchemeType"]</td>
-                            <td class="center">@AccountsListData.Rows[i]["Fld_Status"]</td>
-                            </tr>
-                            srNO++;
-                            }*@
                         </tbody>
                     </table>
                 </div>
@@ -91,7 +75,6 @@
     <script>
         $(document).ready(function () {
             $("#VerifyButton").click(function () {
-                alert('1');
                 var val = $("#accountNumber").val();
                 $.ajax({
                     type: 'GET',
@@ -99,32 +82,26 @@
                     success: function (response) {
                         console.log(response);
                         if (response.fld_Status == 1) {
-                            var jsondata = response.data;
-                            //html = "";
-                            //for (var i = 0 i<jsondata.count; i++) {
-                            //    html += "<tr class='odd gradeX'>"
-                            //    html += "<td class='center'>" + (i + 1) + "</td>"
-                            //    html += "<td class='center'>"jsondata[i]"</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_AccountNumber"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_Amount"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_DepositDate"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_EmiDate"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_Depositor"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_Narration"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_Penalty"] + "</td>"
-                            //    html += "<td class='center'>" + jsondata[i]["Fld_Status"] + "</td>"
-                            //    html += "</tr>";
-                            //}
-                            //$("#emitableId").html("");
-                            //$("#emitableId").append(html);
-                            ////jsondata = jsondata[0];
-                            ////console.log(jsondata);
-                            ////$("#memberName").val(jsondata.Fld_MemberName);
-                            ////$("#emiId").val(jsondata.Fld_Id);
-                            ////$("#loanAccountNumber").val(jsondata.Fld_LoanAccountNumber);
-                            ////$("#depositAmount").val(jsondata.Fld_Amount);
-                            ////$("#dueDate").val(jsondata.Fld_PayDate);
-                            ////$("#paymentMode").val(jsondata.Fld_PaymentMode);
+                            var jsondata = JSON.parse(response.data);
+                            console.log(jsondata.length);
+                            debugger;
+                            html = "";
+                            for (var i = 0; i < jsondata.length; i++) {
+                                html += "<tr class='odd gradeX'>"
+                                html += "<td class='center'>" + (i + 1) + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_AccountNumber"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Amount"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_EmiDate"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Status"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_DepositDate"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Depositor"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Penalty"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Narration"] + "</td>"
+                                html += "</tr>";
+                            }
+                            $("#emitableId").html("");
+                            $("#emitableId").append(html);
+
                         }
                         else {
                             alert("No Record Found");
@@ -139,41 +116,7 @@
                 });
             });
 
-            //if (confirm("Are You Sure")) {
 
-
-            $("#depositButton").click(function () {
-
-                if (confirm("Are You Sure")) {
-                    $.ajax({
-                        type: 'Post',
-                        url: `/api/MasterApi/DepositLoanAmount/${$('#emiId').val()}/${$('#loanAccountNumber').val()}/${$('#depositDate').val()}/${$('#NarrationText').val()}/${$('#penalty').val()}`,
-                        contentType: "application/json",
-                        success: function (response) {
-                            console.log(response);
-                            if (response.fld_Status == 1) {
-                                alert(`Amount Successfully Deposit TxnNo: ${response.txnNo}`);
-                                location.reload();
-                            }
-                            else if (response.fld_Status == 0) {
-                                alert("No Pending Dues");
-                            }
-                            else {
-                                alert("Please Contact to Developer");
-                            }
-                        },
-                        Error: function (e) {
-                            console.log(e);
-                        },
-                        catch: function (e) {
-                            console.log(e);
-                        }
-
-                    });
-
-                }
-            });
-            //}
         });
     </script>
 

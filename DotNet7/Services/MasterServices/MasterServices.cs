@@ -343,5 +343,31 @@ namespace DotNet7.Services.MasterServices
 
             }
         }
+
+        public DataTable GetLoanReport(string AccountNumber)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+
+                    SqlCommand cmd = new SqlCommand("Sp_GetLoanReport", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@loanAccountNumber", AccountNumber));
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    connection.Open();
+                    adapter.Fill(dt);
+                    dt.TableName = "RDReport";
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                return (dt);
+
+            }
+        }
     }
 }

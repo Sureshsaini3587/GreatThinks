@@ -233,5 +233,33 @@ namespace DotNet7.Controllers
         }
 
 
+        [HttpGet]
+        [Route("GetLoanReport")]
+        public ActionResult GetLoanReport(string accountNumber)
+        {
+            try
+            {
+                dynamic response = _masterServices.GetLoanReport(accountNumber);
+                if (response.Rows.Count > 0)
+                {
+
+                    response = JsonConvert.SerializeObject(response);
+                    return Ok(new { data = response, fld_Status = 1 });
+                }
+                else
+                {
+                    response = JsonConvert.SerializeObject(response);
+                    return Ok(new { data = response, fld_Status = 0 });
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { data = ex.Message, fld_Status = -1 });
+            }
+
+        }
+
     }
 }

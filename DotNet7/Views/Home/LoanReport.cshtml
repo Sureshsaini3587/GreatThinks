@@ -1,0 +1,124 @@
+﻿@using System.Data;
+@{
+    ViewData["Title"] = "Loan Report";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+
+
+<div class="row">
+    <!--  page header -->
+    <div class="col-lg-12">
+        <h1 class="page-header">Loan Report</h1>
+    </div>
+    <!-- end  page header -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <!-- Advanced Tables -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">To get full details about loan</div>
+                    <div class="col-md-6">
+                        <input style="padding:5px 10px" id="accountNumber" placeholder="Enter Loan Account Number" />
+                        <button id="VerifyButton" style="margin-left:20px;padding:5px 20px" class="btn btn-success">Verify</button>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>SrNo</th>
+                                <th>Account Number</th>
+                                <th>Amount</th>
+                                <th>Emi Date</th>
+                                <th>Status</th>
+                                <th>Deposit Date</th>
+                                <th>Depositor</th>
+                                <th>Penalty</th>
+                                <th>Narration</th>
+                            </tr>
+
+                        </thead>
+                        <tbody id="emitableId">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!--End Advanced Tables -->
+
+    </div>
+</div>
+
+
+
+
+
+@section Scripts{
+
+
+    <script>
+        $('#side-menu li').removeClass('selected')
+        $('#menu-nav-rdreport').addClass('selected')
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#VerifyButton").click(function () {
+                var val = $("#accountNumber").val();
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/MasterApi/GetLoanReport?accountNumber=${val}`,
+                    success: function (response) {
+                        console.log(response);
+                        if (response.fld_Status == 1) {
+                            var jsondata = JSON.parse(response.data);
+                            console.log(jsondata.length);
+                            debugger;
+                            html = "";
+                            for (var i = 0; i < jsondata.length; i++) {
+                                html += "<tr class='odd gradeX'>"
+                                html += "<td class='center'>" + (i + 1) + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_AccountNumber"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Amount"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_EmiDate"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Status"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_DepositDate"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Depositor"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Penalty"] + "</td>"
+                                html += "<td class='center'>" + jsondata[i]["Fld_Narration"] + "</td>"
+                                html += "</tr>";
+                            }
+                            $("#emitableId").html("");
+                            $("#emitableId").append(html);
+
+                        }
+                        else {
+                            alert("No Record Found");
+                        }
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                        alert('Sorry,Please try again');
+                    },
+
+                });
+            });
+
+
+        });
+    </script>
+
+
+}

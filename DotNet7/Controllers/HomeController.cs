@@ -127,6 +127,11 @@ namespace DotNet7.Controllers
             return View();
         }
 
+        public IActionResult LoanReport()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

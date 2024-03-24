@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\Dev\.nuget\packages\htmltopdfconverter\1.0.2\contentFiles\any\netstandard2.0\NativeLibs\X64\libwkhtmltox.dll" />
+    <Content Remove="C:\Users\Dev\.nuget\packages\htmltopdfconverter\1.0.2\contentFiles\any\netstandard2.0\NativeLibs\X64\libwkhtmltox.dylib" />
+    <Content Remove="C:\Users\Dev\.nuget\packages\htmltopdfconverter\1.0.2\contentFiles\any\netstandard2.0\NativeLibs\X64\libwkhtmltox.so" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="HtmlToPdfConverter" Version="1.0.2" />
     <PackageReference Include="JWT" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
@@ -16,6 +23,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="23.2.0" />
+    <PackageReference Include="Syncfusion.HtmlToPdfConverter.Net.Windows" Version="20.3.0.48" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
   </ItemGroup>

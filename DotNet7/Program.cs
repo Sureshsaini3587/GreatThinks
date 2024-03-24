@@ -1,3 +1,4 @@
+
 using DotNet7.Data;
 using DotNet7.Services.MasterServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +15,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IMasterServices, MasterServices>();
 builder.Services.AddScoped<ILoginServices, LoginServices>();
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DbConnection")));

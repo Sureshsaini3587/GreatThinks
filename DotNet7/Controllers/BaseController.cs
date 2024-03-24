@@ -3,11 +3,13 @@ using DotNet7.Models.Login;
 using DotNet7.Services.MasterServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace DotNet7.Controllers
 {
+
     public class BaseController : Controller
     {
         private readonly ILoginServices _loginServices;
@@ -26,16 +28,16 @@ namespace DotNet7.Controllers
         }
 
 
-
+        [AllowAnonymous]
         [Route("/logout")]
         [HttpPost]
-        public async Task<string> LogoutAsync()
+        public async Task<IActionResult> LogoutAsync()
         {
             //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return "logout Successfully";
+            return Redirect("/login");
             //await HttpContext.SignOutAsync();
             //var a = User.Identity.Name;
             //return RedirectToAction("Login", "Base");

@@ -24,6 +24,8 @@
                     <div class="col-md-6">
                         <input style="padding:5px 10px" id="accountNumber" placeholder="Enter Loan Account Number" />
                         <button id="VerifyButton" style="margin-left:20px;padding:5px 20px" class="btn btn-success">Verify</button>
+
+                        <button id="Download" style="margin-left:20px;padding:5px 20px ;display:none" class="btn btn-success">Download</button>
                     </div>
 
 
@@ -68,12 +70,30 @@
 
     <script>
         $('#side-menu li').removeClass('selected')
-        $('#menu-nav-rdreport').addClass('selected')
+        $('#menu-nav-loanreport').addClass('selected')
 
     </script>
 
     <script>
         $(document).ready(function () {
+            $("#Download").click(function () {
+                var val = $("#accountNumber").val();
+                $.ajax({
+                    type: 'GET',
+                    url: `/download/loanreport?accountNumber=${val}`,
+                    success: function (response) {
+                        console.log(response);
+
+
+                    },
+                    Error: function (e) {
+                        console.log(e);
+                        alert('Sorry,Please try again');
+                    },
+
+                });
+
+            });
             $("#VerifyButton").click(function () {
                 var val = $("#accountNumber").val();
                 $.ajax({
@@ -101,6 +121,7 @@
                             }
                             $("#emitableId").html("");
                             $("#emitableId").append(html);
+                            $("#Download").css('display', 'block');
 
                         }
                         else {

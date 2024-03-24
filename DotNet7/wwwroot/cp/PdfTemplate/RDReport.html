@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title> Cashier Daily Report</title>
+    <style>
+        .pdftable {
+            width: 100%;
+            box-sizing: border-box;
+            border-spacing: 2px;
+            border-color: grey;
+            border-collapse: collapse;
+        }
+
+        pdftable, tr, td {
+            border: 1px solid darkgrey;
+            color: black;
+            padding: 5px;
+        }
+
+        .line_format {
+            line-height: 125%;
+            font-size: 14pt
+        }
+    </style>
+</head>
+<body>
+    <div class="line_format" style="width:100%;margin-left:auto;margin-right:auto;">
+        <div style="float:left;">
+            <img style="max-width:100px;" src="$$Logo$$" />
+        </div>
+        <div style="margin-top:25px;text-align:center">
+            <div>
+                <div>
+                    <p>
+                        <b><span style="font-size:35px;">$$company$$</span></b> <br />
+                        $$Address$$ <br />
+                        $$city$$, $$state$$, $$Zip_Code$$
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="text-align: center;font-size:30pt; margin-bottom: 15px;">Cashier Daily Report</div>
+            <table class="pdftable" style="margin-left:auto;margin-right:auto;">
+                <thead>
+                    <tr style="background-color:#eee;">
+                        <td style="text-align:center">Sl. No.</td>
+                        <td style="text-align:center">Denomination</td>
+                        <td style="text-align:center">Denomination Debit</td>
+                        <td style="text-align:center">Denomination Credit</td>
+                        <td style="text-align:center">Amount Debit</td>
+                        <td style="text-align:center">Amount Credit</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    $$tbody$$
+                </tbody>
+            </table><br />
+        </div>
+    </div>
+</body>
+</html>

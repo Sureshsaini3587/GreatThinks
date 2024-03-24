@@ -28,7 +28,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" target="_blank" href="https://www.greatthinks.in/">
                     <img src="/assets/img/logo.png" alt="" />
                 </a>
             </div>
@@ -243,15 +243,16 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="login.html"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
+                            <a href="@Url.Action("/logout")"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
                         </li>
                     </ul>
                     <!-- end dropdown-user -->
                 </li>
                 <!-- end main dropdown -->
             </ul>
+          
             <!-- end navbar-top-links -->
-
+              
         </nav>
         <!-- end navbar top -->
         <!-- navbar side -->
@@ -263,14 +264,14 @@
                     <li>
                         <!-- user image section-->
                         <div class="user-section">
-                            <div class="user-section-inner">
-                                <img src="/assets/img/user.jpg" alt="">
-                            </div>
+                            @* <div class="user-section-inner">
+                            <img src="/assets/img/user.jpg" alt="">
+                            </div>*@
                             <div class="user-info">
-                                <div>Jonny <strong>Deen</strong></div>
-                                <div class="user-text-online">
-                                    <span class="user-circle-online btn btn-success btn-circle "></span>&nbsp;Online
-                                </div>
+                                <div><strong>@User.Identity.Name</strong></div>
+                                @*<div class="user-text-online">
+                                <span class="user-circle-online btn btn-success btn-circle "></span>&nbsp;Online
+                                </div>*@
                             </div>
                         </div>
                         <!--end user image section-->
